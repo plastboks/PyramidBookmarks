@@ -1,4 +1,12 @@
 <%inherit file="pyramid_bookmarks:templates/base.mako"/>
+<%
+from pyramid.security import authenticated_userid
+user_id = authenticated_userid(request)
+%>
+% if user_id:
+    Welcome <strong>${user_id}</strong> ::
+    <a href="${request.route_url('logout')}">Sign Out</a>
+%endif
 
 % if paginator.items:
 

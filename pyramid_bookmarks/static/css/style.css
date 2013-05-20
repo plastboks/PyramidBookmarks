@@ -12,7 +12,7 @@ label{
     display: inline-block;
 }
 
-input[type=text]{
+#bookmarkedit input[type=text]{
     min-width: 505px;
 }
 
@@ -29,4 +29,7 @@ textarea{
 .error{
     font-weight: bold;
     color: red;
+}
+
+#login input {
 }

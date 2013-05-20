@@ -1,8 +1,14 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
+from pyramid.security import remember, forget
 
 from sqlalchemy.exc import DBAPIError
+
+from pyramid.view import (
+  view_config,
+  forbidden_view_config,
+  )
 
 from .models import (
   DBSession,
@@ -17,14 +23,18 @@ from .forms import (
 
 
 @view_config(route_name='home', 
-             renderer='pyramid_bookmarks:templates/index.mako')
+             renderer='pyramid_bookmarks:templates/index.mako',
+             permission='view')
+@forbidden_view_config(renderer='pyramid_bookmarks:templates/login.mako')
 def index_page(request):
   page = int(request.params.get('page', 1))
   paginator = Bookmark.get_paginator(request, page)
   return {'paginator':paginator}
 
+
 @view_config(route_name='bookmark', 
-             renderer='pyramid_bookmarks:templates/view_bookmark.mako')
+             renderer='pyramid_bookmarks:templates/view_bookmark.mako',
+             permission='view')
 def bookmark_view(request):
   id = int(request.matchdict.get('id', -1))
   bookmark = Bookmark.by_id(id)
@@ -35,7 +45,8 @@ def bookmark_view(request):
 
 @view_config(route_name='bookmark_action', 
              renderer='pyramid_bookmarks:templates/edit_bookmark.mako',
-             match_param='action=create')
+             match_param='action=create',
+             permission='create')
 def bookmark_create(request):
   bookmark = Bookmark()
   form = BookmarkCreateForm(request.POST)
@@ -48,7 +59,8 @@ def bookmark_create(request):
 
 @view_config(route_name='bookmark_action',
              renderer='pyramid_bookmarks:templates/edit_bookmark.mako',
-             match_param='action=edit')
+             match_param='action=edit',
+             permission='edit')
 def bookmark_edit(request):
   id = int(request.params.get('id', -1))
   bookmark = Bookmark.by_id(id)
@@ -63,12 +75,29 @@ def bookmark_edit(request):
   return {'form':form, 'action':request.matchdict.get('action')}
 
 
-@view_config(route_name='auth',
-             match_param='action=in',
+@view_config(route_name='login',
+             renderer='pyramid_bookmarks:templates/login.mako')
+@view_config(route_name='login',
              renderer='string',
              request_method='POST')
-@view_config(route_name='auth',
-             match_param='action=out',
+def bookmark_login(request):
+  if request.method == "POST" and request.POST.get('username'):
+    user = User.by_username(request.POST.get('username'))
+    if user and user.verify_password(request.POST.get('password')):
+      headers = remember(request, user.username)
+      return HTTPFound(location=request.route_url('home'),
+                       headers=headers)
+    else:
+      headers = forget(request)
+      return HTTPFound(location=request.route_url('login'),
+                     headers=headers)
+  else:
+    return {'action':request.matchdict.get('action')}
+
+
+@view_config(route_name='logout',
              renderer='string')
-def sign_in_out(request):
-  return {}
+def bookmark_logout(request):
+  headers = forget(request)
+  return HTTPFound(location=request.route_url('login'),
+                   headers=headers)
