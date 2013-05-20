@@ -1,8 +1,8 @@
-<%inherit file="pyramid_blogr:templates/base.mako"/>
+<%inherit file="pyramid_bookmarks:templates/base.mako"/>
 
 <h1>${bookmark.title}</h1>
 <hr/>
-<p>${bookmark.body}</p>
+<p>${bookmark.url}</p>
 <hr/>
 <p>Created <strong title="${bookmark.created}">
 ${bookmark.created_in_words}</strong> ago</p>

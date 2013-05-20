@@ -5,10 +5,15 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from sqlalchemy.exc import DBAPIError
 
 from .models import (
-    DBSession,
-    User,
-    Bookmark,
-    )
+  DBSession,
+  User,
+  Bookmark,
+  )
+
+from .forms import (
+  BookmarkCreateForm,
+  BookmarkUpdateForm,
+  )
 
 
 @view_config(route_name='home', 
@@ -19,7 +24,7 @@ def index_page(request):
   return {'paginator':paginator}
 
 @view_config(route_name='bookmark', 
-             renderer='pyramid_bookmarks:templats/view_bookmark.mako')
+             renderer='pyramid_bookmarks:templates/view_bookmark.mako')
 def bookmark_view(request):
   id = int(request.matchdict.get('id', -1))
   bookmark = Bookmark.by_id(id)
@@ -32,14 +37,30 @@ def bookmark_view(request):
              renderer='pyramid_bookmarks:templates/edit_bookmark.mako',
              match_param='action=create')
 def bookmark_create(request):
-  return {}
+  bookmark = Bookmark()
+  form = BookmarkCreateForm(request.POST)
+  if request.method == 'POST' and form.validate():
+    form.populate_obj(bookmark)
+    DBSession.add(bookmark)
+    return HTTPFound(location=request.route_url('home'))
+  return {'form':form, 'action':request.matchdict.get('action')}
 
 
 @view_config(route_name='bookmark_action',
-             renderer='pyramid_bookmarks:templates/edit_bookmarks.mako',
+             renderer='pyramid_bookmarks:templates/edit_bookmark.mako',
              match_param='action=edit')
 def bookmark_edit(request):
-  return {}
+  id = int(request.params.get('id', -1))
+  bookmark = Bookmark.by_id(id)
+  if not bookmark:
+    return HTTPNotFound()
+  form = BookmarkUpdateForm(request.POST, bookmark)
+  if request.method == 'POST' and form.validate():
+    form.populate_obj(bookmark)
+    return HTTPFound(location=request.route_url('bookmark',
+                                        id=bookmark.id,
+                                        slug=bookmark.slug))
+  return {'form':form, 'action':request.matchdict.get('action')}
 
 
 @view_config(route_name='auth',
