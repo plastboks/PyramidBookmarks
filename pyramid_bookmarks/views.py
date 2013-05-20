@@ -2,6 +2,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import remember, forget
+from pyramid.security import authenticated_userid
 
 from sqlalchemy.exc import DBAPIError
 
@@ -29,7 +30,8 @@ from .forms import (
 def index_page(request):
   page = int(request.params.get('page', 1))
   paginator = Bookmark.get_paginator(request, page)
-  return {'paginator':paginator}
+  user = User.by_id(authenticated_userid(request))
+  return {'paginator':paginator, 'username':user.username}
 
 
 @view_config(route_name='bookmark', 
@@ -52,9 +54,12 @@ def bookmark_create(request):
   form = BookmarkCreateForm(request.POST)
   if request.method == 'POST' and form.validate():
     form.populate_obj(bookmark)
+    user_id = authenticated_userid(request)
+    bookmark.owner_id = user_id
     DBSession.add(bookmark)
     return HTTPFound(location=request.route_url('home'))
-  return {'form':form, 'action':request.matchdict.get('action')}
+  return {'form':form, 
+          'action':request.matchdict.get('action')}
 
 
 @view_config(route_name='bookmark_action',
@@ -75,6 +80,19 @@ def bookmark_edit(request):
   return {'form':form, 'action':request.matchdict.get('action')}
 
 
+@view_config(route_name='bookmark_action',
+             renderer='string',
+             match_param='action=delete',
+             permission='delete')
+def bookmark_delete(request):
+  id = int(request.params.get('id', -1))
+  bookmark = Bookmark.by_id(id)
+  if not bookmark:
+    return HTTPNotFound()
+  DBSession.delete(bookmark)
+  return HTTPFound(location=request.route_url('home'))
+
+
 @view_config(route_name='login',
              renderer='pyramid_bookmarks:templates/login.mako')
 @view_config(route_name='login',
@@ -84,7 +102,7 @@ def bookmark_login(request):
   if request.method == "POST" and request.POST.get('username'):
     user = User.by_username(request.POST.get('username'))
     if user and user.verify_password(request.POST.get('password')):
-      headers = remember(request, user.username)
+      headers = remember(request, user.id)
       return HTTPFound(location=request.route_url('home'),
                        headers=headers)
     else:

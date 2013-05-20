@@ -10,7 +10,6 @@ from wtforms import (
 strip_filter = lambda x: x.strip() if x else None
 
 class BookmarkCreateForm(Form):
-  #owner_id = HiddenField()
   title = TextField('Bookmark title',
                     [validators.Length(min=1, max=255)],
                     filters=[strip_filter])

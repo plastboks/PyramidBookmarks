@@ -37,12 +37,17 @@ class User(Base):
   last_logged = Column(DateTime, default=datetime.datetime.utcnow)
 
   @classmethod
+  def by_id(cls, id):
+    return DBSession.query(User).filter(User.id == id).first()
+
+  @classmethod
   def by_username(cls, username):
     return DBSession.query(User).filter(User.username == username).first()
 
   def verify_password(self, password):
     manager = BCRYPTPasswordManager()
     return manager.check(self.password, password)
+
 
 class Bookmark(Base):
   __tablename__ = 'bookmarks'

@@ -7,7 +7,8 @@ from pyramid.security import (
 class EntryFactory(object):
   __acl__ = [(Allow, Authenticated, 'view'),
              (Allow, Authenticated, 'create'),
-             (Allow, Authenticated, 'edit'),]
+             (Allow, Authenticated, 'edit'),
+             (Allow, Authenticated, 'delete'),]
   
   def __init__(self, request):
     pass
