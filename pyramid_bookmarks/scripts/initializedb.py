@@ -1,6 +1,9 @@
 import os
 import sys
 import transaction
+import getpass
+
+from cryptacular.bcrypt import BCRYPTPasswordManager
 
 from sqlalchemy import engine_from_config
 
@@ -11,8 +14,9 @@ from pyramid.paster import (
 
 from ..models import (
     DBSession,
-    MyModel,
     Base,
+    User,
+    Bookmark,
     )
 
 
@@ -32,6 +36,11 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
+
+    manager = BCRYPTPasswordManager()
+    pw = getpass.getpass()    
+    hashed = manager.encode(pw)
+    
     with transaction.manager:
-        model = MyModel(name='one', value=1)
-        DBSession.add(model)
+        admin = User(username=u'admin', email='admin@admin.local', password=hashed)
+        DBSession.add(admin)

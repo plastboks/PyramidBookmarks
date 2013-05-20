@@ -16,6 +16,7 @@ requires = [
     'waitress',
     'wtforms',
     'webhelpers',
+    'cryptacular',
     ]
 
 setup(name='pyramid_bookmarks',
