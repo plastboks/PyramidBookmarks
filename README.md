@@ -5,12 +5,22 @@ My simple and self educational Pyramid based bookmark app
 
 Install
 =======
-`/path/to/venv/pip install -e .`
 
-`/path/to/venv/initialize_app_db .ini` (this will prompt for admin password)
+Install a new virtualenv `virtualenv venv`
+
+Activate the new virtualenv `. venv/bin/activate`
+
+edit the secret in __init__py
+
+`pip install -e .`
+
+`initialize_pyramid_bookmarks_db environment.ini` (this will prompt for admin password)
+
+`pserve environment.ini`
+
 
 
 Credits
 ====
-This application is heavily inspired by the blogr tutorial pyramid-blogr.readthedocs.org
+This application is heavily inspired by the blogr tutorial at: http://pyramid-blogr.readthedocs.org/en/latest/
 

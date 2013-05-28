@@ -24,15 +24,18 @@ def main(global_config, **settings):
   config = Configurator(settings=settings,
                         authentication_policy = authenPol,
                         authorization_policy = authorPol,
-                        root_factory='pyramid_bookmarks.security.EntryFactory'
                         )
   config.add_static_view('static', 'static', cache_max_age=3600)
-  config.add_route('home', '/')
+  config.add_route('index', '/',
+                   factory='pyramid_bookmarks.security.EntryFactory')
   config.add_route('bookmark', 
-                   '/bookmark/{id:\d+}/{slug}')
+                   '/bookmark/{id:\d+}/{slug}',
+                   factory='pyramid_bookmarks.security.EntryFactory')
   config.add_route('bookmark_action', 
-                   '/bookmark/{action}')
-  config.add_route('login', '/login');
-  config.add_route('logout', '/logout');
+                   '/bookmark/{action}',
+                   factory='pyramid_bookmarks.security.EntryFactory')
+  config.add_route('login', '/login')
+  config.add_route('logout', '/logout',
+                   factory='pyramid_bookmarks.security.EntryFactory')
   config.scan()
   return config.make_wsgi_app()

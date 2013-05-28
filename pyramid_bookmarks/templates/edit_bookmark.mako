@@ -29,5 +29,5 @@
   </form>
 </div>
 <p>
-  <a href="${request.route_url('home')}">Go Back</a>
+  <a href="${request.route_url('index')}">Go Back</a>
 </p>

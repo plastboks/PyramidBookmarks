@@ -1,5 +1,5 @@
 from pyramid.response import Response
-from pyramid.view import view_config
+from pyramid.view import view_config, forbidden_view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import remember, forget
 from pyramid.security import authenticated_userid
@@ -23,7 +23,7 @@ from .forms import (
   )
 
 
-@view_config(route_name='home', 
+@view_config(route_name='index', 
              renderer='pyramid_bookmarks:templates/index.mako',
              permission='view')
 @forbidden_view_config(renderer='pyramid_bookmarks:templates/login.mako')
@@ -31,8 +31,9 @@ def index_page(request):
   page = int(request.params.get('page', 1))
   paginator = Bookmark.get_paginator(request, page)
   user = User.by_id(authenticated_userid(request))
-  return {'paginator':paginator, 'username':user.username}
-
+  if user:
+    return {'paginator':paginator, 'username':user.username}
+  return HTTPFound(location=request.route_url('login'))
 
 @view_config(route_name='bookmark', 
              renderer='pyramid_bookmarks:templates/view_bookmark.mako',
@@ -57,7 +58,7 @@ def bookmark_create(request):
     user_id = authenticated_userid(request)
     bookmark.owner_id = user_id
     DBSession.add(bookmark)
-    return HTTPFound(location=request.route_url('home'))
+    return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
           'action':request.matchdict.get('action')}
 
@@ -90,7 +91,7 @@ def bookmark_delete(request):
   if not bookmark:
     return HTTPNotFound()
   DBSession.delete(bookmark)
-  return HTTPFound(location=request.route_url('home'))
+  return HTTPFound(location=request.route_url('index'))
 
 
 @view_config(route_name='login',
@@ -103,7 +104,7 @@ def bookmark_login(request):
     user = User.by_username(request.POST.get('username'))
     if user and user.verify_password(request.POST.get('password')):
       headers = remember(request, user.id)
-      return HTTPFound(location=request.route_url('home'),
+      return HTTPFound(location=request.route_url('index'),
                        headers=headers)
     else:
       headers = forget(request)
