@@ -10,7 +10,7 @@ Install a new virtualenv `virtualenv venv`
 
 Activate the new virtualenv `. venv/bin/activate`
 
-edit the secret in __init__py
+edit the secret in '__init__py'
 
 `pip install -e .`
 
