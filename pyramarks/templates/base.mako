@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="keywords" content="python web application" />
   <meta name="description" content="pyramid web application" />
-  <title>Bookmarkapp</title>
+  <title>Bookmarkapp - ${title} </title>
   <link rel="shortcut icon" href="${request.static_url('pyramarks:static/favicon.ico')}" />
   <link rel="stylesheet" href="${request.static_url('pyramarks:static/css/normalize.css')}" type="text/css" media="screen" charset="utf-8" />
   <link rel="stylesheet" href="${request.static_url('pyramarks:static/css/style.css')}" type="text/css" media="screen" charset="utf-8" />

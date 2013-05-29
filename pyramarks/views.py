@@ -32,7 +32,9 @@ def index_page(request):
   page = int(request.params.get('page', 1))
   paginator = Bookmark.get_paginator(request, page)
   user = User.by_id(authenticated_userid(request))
-  return {'paginator':paginator, 'username':user.username}
+  return {'paginator':paginator, 
+          'username':user.username,
+          'title':'Home'}
 
 @view_config(route_name='bookmark', 
              renderer='pyramarks:templates/view_bookmark.mako',
@@ -41,7 +43,8 @@ def bookmark_view(request):
   id = int(request.matchdict.get('id', -1))
   bookmark = Bookmark.by_id(id)
   if bookmark:
-     return {'bookmark':bookmark}  
+     return {'bookmark':bookmark,
+             'title':bookmark.title}  
   return HTTPNotFound()
 
 @view_config(route_name='bookmark_action', 
@@ -57,7 +60,9 @@ def bookmark_create(request):
     bookmark.owner_id = user_id
     DBSession.add(bookmark)
     return HTTPFound(location=request.route_url('index'))
-  return {'form':form, 'action':request.matchdict.get('action')}
+  return {'form':form, 
+          'action':request.matchdict.get('action'),
+          'title':'New'}
 
 @view_config(route_name='bookmark_action',
              renderer='pyramarks:templates/edit_bookmark.mako',
@@ -74,7 +79,9 @@ def bookmark_edit(request):
     return HTTPFound(location=request.route_url('bookmark',
                                                 id=bookmark.id,
                                                 slug=bookmark.slug))
-  return {'form':form, 'action':request.matchdict.get('action')}
+  return {'form':form, 
+          'action':request.matchdict.get('action'),
+          'title':'Edit'+bookmark.title}
 
 @view_config(route_name='bookmark_action',
              renderer='string',
@@ -108,7 +115,10 @@ def bookmark_login(request):
     headers = forget(request)
     return HTTPFound(location=request.route_url('login'),
                      headers=headers)
-  return {'action':request.matchdict.get('action')}
+  if authenticated_userid(request):
+    return HTTPFound(location=request.route_url('index'))
+  return {'action':request.matchdict.get('action'),
+          'title':'Login'}
 
 @view_config(route_name='logout',
              renderer='string')
