@@ -24,3 +24,9 @@ Credits
 ====
 This application is heavily inspired by the blogr tutorial at: http://pyramid-blogr.readthedocs.org/en/latest/
 
+Useful Links
+============
+
+* http://docs.pylonsproject.org/projects/pyramid/en/latest/
+* http://docs.pylonsproject.org/projects/pyramid/en/1.4-branch/tutorials/wiki2/index.html
+

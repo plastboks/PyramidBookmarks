@@ -1,5 +1,6 @@
 <%inherit file="pyramarks:templates/base.mako"/>
 <div id="login">
+  <h1>Login</h1>
   <form action="${request.route_url('login')}" method="post">
     <p>
       <label>User</label>

@@ -1,8 +1,5 @@
 <%inherit file="pyramarks:templates/base.mako"/>
 
-Welcome <strong>${username}</strong> ::
-<a href="${request.route_url('logout')}">Sign Out</a>
-
 % if paginator.items:
 
     ${paginator.pager()}
@@ -26,5 +23,6 @@ Welcome <strong>${username}</strong> ::
 
 %endif
 
-<p><a href="${request.route_url('bookmark_action',action='create')}">
-Create a new bookmark</a></p>
+<p>
+  <a href="${request.route_url('bookmark_action',action='create')}">Create a new bookmark</a>
+</p>

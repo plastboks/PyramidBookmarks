@@ -14,7 +14,10 @@
 </head>
 <body>
 
-  <div id="header"></div>
+  <div id="header">
+    <h1>Pyramarks</h1>
+    <%include file="pyramarks:templates/menus.mako"/>
+  </div>
   <div id="content">
       ${next.body()}
   </div>
