@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import sqlalchemy as sa
 from sqlalchemy import (
     Column,
@@ -28,13 +28,16 @@ from webhelpers.date import time_ago_in_words
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
+##############
+# User Class #
+##############
 class User(Base):
   __tablename__ = 'users'
   id = Column(Integer, primary_key=True)
   username = Column(Unicode(255), unique=True, nullable=False)
   email = Column(Unicode(255), unique=True, nullable=False)
   password = Column(Unicode(255), nullable=False)
-  last_logged = Column(DateTime, default=datetime.datetime.utcnow)
+  last_logged = Column(DateTime, default=datetime.utcnow)
 
   @classmethod
   def by_id(cls, id):
@@ -49,14 +52,17 @@ class User(Base):
     return manager.check(self.password, password)
 
 
+##################
+# Bookmark Class #
+##################
 class Bookmark(Base):
   __tablename__ = 'bookmarks'
   id = Column(Integer, primary_key=True)
   owner_id = Column(Integer, ForeignKey('users.id'))
   title = Column(Unicode(255), nullable=False)
   url = Column(Unicode(512), nullable=False)
-  created = Column(DateTime, default=datetime.datetime.utcnow)
-  updated = Column(DateTime, default=datetime.datetime.utcnow)
+  created = Column(DateTime, default=datetime.utcnow)
+  updated = Column(DateTime, default=datetime.utcnow)
   
   @classmethod
   def all(cls):

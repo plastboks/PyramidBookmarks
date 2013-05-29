@@ -1,35 +1,179 @@
 body {
-  width: 700px;
-  margin: 0 auto;
+    width: 800px;
+    margin: 0 auto;
 }
 
-form{
+a {
+    text-decoration: none;  
+    color: dimgray;
 }
 
-label{
-    min-width: 150px;
-    vertical-align: top;
-    display: inline-block;
-}
 
-#bookmarkedit input[type=text]{
-    min-width: 505px;
-}
+/**
+ *
+ * Header area
+ *
+ */
 
-textarea{
-    color: #222;
-    border: 1px solid #CCC;
-    font-family: sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    min-width: 505px;
+#header {
     min-height: 100px;
 }
 
-.error{
-    font-weight: bold;
-    color: red;
+#header ul {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
 }
 
-#login input {
+#header ul li {
+    display: inline;
+    border: 1px solid papayawhip;
+    padding: 2px;
+    background: snow;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#header #search {
+    float: right;
+    font-size: 0.9em;
+}
+
+#header #primsection {
+    margin-top: 10px;
+}
+
+#header #secsection {
+}
+
+
+/**
+ *
+ * Login area
+ *
+ */
+#login h1 {
+}
+
+#login {
+    margin: 0 auto;
+    width: 25%;
+}
+
+
+/**
+ *
+ * Content area
+ *
+ */
+#flashmessages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#flashmessages li {
+    display: block;
+    margin: 5px 0px;
+}
+
+#flashmessages ul .error {
+    border: 1px solid red;
+    padding: 5px;
+    background: salmon;
+}
+
+#flashmessages ul .info {
+    border: 1px solid green;
+    padding: 5px;
+    background: greenyellow;
+}
+
+.extrabox {
+    border: 1px solid gold;
+    padding: 5px;
+    background: seashell;
+}
+
+.extrabox h3 {
+    padding: 0;
+    margin: 0;
+    color: dimgray;
+}
+
+.bookmarksbox {
+    padding: 5px;
+    background: mintcream;
+    border: 1px solid lightblue;
+    margin-top: 10px;
+}
+
+.bookmarks {
+    width: 100%;
+    font-size: 0.9em;
+}
+
+.bookmarks th {
+    color: dimgray;
+    text-align: left;
+}
+
+.bookmarks tr {
+    height: 40px;
+}
+
+.bookmarks .titlecolumn .clickIncrement {
+    font-size: 0.9;
+    color: gray;
+}
+
+.bookmarks .titlecolumn .tag {
+    font-size: 0.75em;
+    color: mediumvioletred;
+}
+
+.bookmarks .edit,
+.bookmarks .actioncolumn a,
+.bookmarks .delete {
+    font-size: 0.75em;
+}
+
+.bookmarks .clickscolumn {
+    font-size: 0.75em;
+    color: orangered;
+}
+
+.bookmarkform input[type='text'] {
+    width: 100%;
+}
+
+#content {
+    padding-bottom: 10px;
+}
+
+#paginate {
+    font-size: 0.8em;
+    padding: 20px 0px 0px 0px;
+    text-align: center;
+}
+
+#paginate a {
+    margin: 0px 30px;
+}
+
+.description {
+    color: dimgray;
+    font-size: 0.75em;
+}
+
+/**
+ *
+ * Footer area
+ *
+ */
+#footer {
+    padding: 30px 0px;
+    font-size: 0.7em;
+    text-align: center;
 }

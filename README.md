@@ -6,7 +6,7 @@ My simple and self educational Pyramid based bookmark app
 Install
 =======
 
-Install a new virtualenv `virtualenv venv`
+Install a new virtualenv `virtualenv venv` (best tip for now is to use virtualenv2...)
 
 Activate the new virtualenv `. venv/bin/activate`
 
