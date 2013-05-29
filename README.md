@@ -14,7 +14,7 @@ edit the secret in '__init__py'
 
 `pip install -e .`
 
-`initialize_pyramid_bookmarks_db environment.ini` (this will prompt for admin password)
+`initialize_pyramarks_db environment.ini` (this will prompt for admin password)
 
 `pserve environment.ini`
 

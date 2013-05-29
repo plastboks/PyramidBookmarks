@@ -19,9 +19,9 @@ requires = [
     'cryptacular',
     ]
 
-setup(name='pyramid_bookmarks',
+setup(name='pyramarks',
       version='0.0',
-      description='pyramid_bookmarks',
+      description='pyramarks',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Programming Language :: Python",
@@ -36,12 +36,12 @@ setup(name='pyramid_bookmarks',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='pyramid_bookmarks',
+      test_suite='pyramarks',
       install_requires=requires,
       entry_points="""\
       [paste.app_factory]
-      main = pyramid_bookmarks:main
+      main = pyramarks:main
       [console_scripts]
-      initialize_pyramid_bookmarks_db = pyramid_bookmarks.scripts.initializedb:main
+      initialize_pyramarks_db = pyramarks.scripts.initializedb:main
       """,
       )

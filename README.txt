@@ -1,4 +1,4 @@
-pyramid_bookmarks README
+pyramarks README
 ==================
 
 Getting Started
@@ -8,7 +8,7 @@ Getting Started
 
 - $venv/bin/python setup.py develop
 
-- $venv/bin/initialize_pyramid_bookmarks_db development.ini
+- $venv/bin/initialize_pyramarks_db development.ini
 
 - $venv/bin/pserve development.ini
 
