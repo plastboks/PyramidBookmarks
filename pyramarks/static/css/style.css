@@ -16,7 +16,7 @@ a {
  */
 
 #header {
-    min-height: 100px;
+    min-height: 50px;
 }
 
 #header ul {
@@ -67,39 +67,12 @@ a {
  * Content area
  *
  */
-#flashmessages ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+#content {
+    padding-bottom: 10px;
 }
 
-#flashmessages li {
-    display: block;
-    margin: 5px 0px;
-}
-
-#flashmessages ul .error {
-    border: 1px solid red;
-    padding: 5px;
-    background: salmon;
-}
-
-#flashmessages ul .info {
-    border: 1px solid green;
-    padding: 5px;
-    background: greenyellow;
-}
-
-.extrabox {
-    border: 1px solid gold;
-    padding: 5px;
-    background: seashell;
-}
-
-.extrabox h3 {
-    padding: 0;
-    margin: 0;
-    color: dimgray;
+#content #bookmarkedit form input[type="text"]{
+  width: 100%;
 }
 
 .bookmarksbox {
@@ -165,6 +138,27 @@ a {
 .description {
     color: dimgray;
     font-size: 0.75em;
+}
+
+/**
+ *
+ * Footer area
+ *
+ */
+#footer {
+    padding: 30px 0px;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+#paginate {
+    font-size: 0.8em;
+    padding: 20px 0px 0px 0px;
+    text-align: center;
+}
+
+#paginate a {
+    margin: 0px 30px;
 }
 
 /**

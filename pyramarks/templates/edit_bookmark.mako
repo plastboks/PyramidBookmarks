@@ -1,33 +1,35 @@
 <%inherit file="pyramarks:templates/base.mako"/>
 
 <div id="bookmarkedit">
+  <h1>Add a new bookmark</h1>
+
   <form action="${request.route_url('bookmark_action',action=action)}" method="post">
+
     %if action =='edit':
       ${form.id()}
     %endif
 
     % for error in form.title.errors:
-        <div class="error">${ error }</div>
+      <div class="error">${ error }</div>
     % endfor
 
-    <div>
-      <label>${form.title.label}</label>
+    <p>
+      <label>${form.title.label}</label><br />
       ${form.title()}
-    </div>
+    </p>
 
     % for error in form.url.errors:
-    <div class="error">${error}</div>
+      <div class="error">${error}</div>
     % endfor
 
-    <div>
-      <label>${form.url.label}</label>
+    <p>
+      <label>${form.url.label}</label><br />
       ${form.url()}
-    </div>
-    <div>
+    </p>
+
+    <p>
       <input type="submit" value="Submit">
-    </div>
+    </p>
+
   </form>
 </div>
-<p>
-  <a href="${request.route_url('index')}">Go Back</a>
-</p>

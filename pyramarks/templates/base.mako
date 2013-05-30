@@ -15,7 +15,6 @@
 <body>
 
   <div id="header">
-    <h1>Pyramarks</h1>
     <%include file="pyramarks:templates/menus.mako"/>
   </div>
   <div id="content">

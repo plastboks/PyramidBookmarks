@@ -5,6 +5,7 @@ from wtforms import (
   TextAreaField,
   validators,
   HiddenField,
+  
   )
 
 strip_filter = lambda x: x.strip() if x else None
@@ -14,7 +15,9 @@ class BookmarkCreateForm(Form):
                     [validators.Length(min=1, max=255)],
                     filters=[strip_filter])
   url = TextField('Bookmark URL',
-                      [validators.Length(min=1, max=512)],
+                      [validators.Length(min=1, max=512),
+                       validators.URL(require_tld=False,
+                                      message='Not a valid URL')],
                       filters=[strip_filter])
 
 class BookmarkUpdateForm(BookmarkCreateForm):

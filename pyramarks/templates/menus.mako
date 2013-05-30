@@ -6,4 +6,9 @@
     <li><a href="${request.route_url('logout')}">Logout</a></li>
   </ul>
 </div>
+<div id="secmenu">
+  <ul>
+    <li><a href="${request.route_url('bookmark_action',action='create')}">Create a new bookmark</a></li>
+  </ul>
+</div>
 % endif

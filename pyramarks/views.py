@@ -36,17 +36,6 @@ def index_page(request):
           'username':user.username,
           'title':'Home'}
 
-@view_config(route_name='bookmark', 
-             renderer='pyramarks:templates/view_bookmark.mako',
-             permission='view')
-def bookmark_view(request):
-  id = int(request.matchdict.get('id', -1))
-  bookmark = Bookmark.by_id(id)
-  if bookmark:
-     return {'bookmark':bookmark,
-             'title':bookmark.title}  
-  return HTTPNotFound()
-
 @view_config(route_name='bookmark_action', 
              renderer='pyramarks:templates/edit_bookmark.mako',
              match_param='action=create',
