@@ -19,6 +19,7 @@ from .models import (
 from .forms import (
   BookmarkCreateForm,
   BookmarkUpdateForm,
+  UserRegisterForm,
   )
 
 
@@ -83,6 +84,22 @@ def bookmark_delete(request):
     DBSession.delete(bookmark)
     return HTTPFound(location=request.route_url('index'))
   return HTTPNotFound()
+
+
+################
+# User section #
+################
+@view_config(route_name='register',
+             renderer='pyramarks:templates/register.mako')
+def user_register(request):
+  form = UserRegisterForm(request.POST)
+  user = User()
+  if request.method == "POST" and form.validate():
+    form.populate_obj(user)  
+    return HTTPFound(location=request.route_url('login'))
+  return {'form':form,
+          'action':request.matchdict.get('action'),
+          'title':'Register'}
 
 
 ########################
