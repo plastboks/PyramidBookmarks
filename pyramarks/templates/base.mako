@@ -17,6 +17,11 @@
   <div id="header">
     <%include file="pyramarks:templates/menus.mako"/>
   </div>
+  <div class="flashmessage">
+% for message in request.session.pop_flash():
+    ${ message }
+% endfor
+  </div>
   <div id="content">
       ${next.body()}
   </div>

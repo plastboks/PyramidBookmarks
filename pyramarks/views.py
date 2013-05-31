@@ -20,6 +20,7 @@ from .forms import (
   BookmarkCreateForm,
   BookmarkUpdateForm,
   UserRegisterForm,
+  UserProfileForm,
   )
 
 
@@ -31,8 +32,8 @@ from .forms import (
              permission='view')
 def index_page(request):
   page = int(request.params.get('page', 1))
-  paginator = Bookmark.get_paginator(request, page)
   user = User.by_id(authenticated_userid(request))
+  paginator = user.bookmarks(page)
   return {'paginator':paginator, 
           'username':user.username,
           'title':'Home'}
@@ -49,6 +50,7 @@ def bookmark_create(request):
     user_id = authenticated_userid(request)
     bookmark.owner_id = user_id
     DBSession.add(bookmark)
+    request.session.flash('Bookmark %s created' % (bookmark.title))
     return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
           'action':request.matchdict.get('action'),
@@ -59,8 +61,9 @@ def bookmark_create(request):
              match_param='action=edit',
              permission='edit')
 def bookmark_edit(request):
+  user = User.by_id(authenticated_userid(request))
   id = int(request.params.get('id', -1))
-  bookmark = Bookmark.by_id(id)
+  bookmark = user.bookmark(id)
   if not bookmark:
     return HTTPNotFound()
   form = BookmarkUpdateForm(request.POST, bookmark)
@@ -78,8 +81,9 @@ def bookmark_edit(request):
              match_param='action=delete',
              permission='delete')
 def bookmark_delete(request):
+  user = User.by_id(authenticated_userid(request))
   id = int(request.params.get('id', -1))
-  bookmark = Bookmark.by_id(id)
+  bookmark = user.bookmark(id)
   if bookmark:
     DBSession.delete(bookmark)
     return HTTPFound(location=request.route_url('index'))
@@ -96,10 +100,32 @@ def user_register(request):
   user = User()
   if request.method == "POST" and form.validate():
     form.populate_obj(user)  
+    user.password = user.hash_password(form.password.data)
+    DBSession.add(user)
+    request.session.flash('User registered')
     return HTTPFound(location=request.route_url('login'))
   return {'form':form,
           'action':request.matchdict.get('action'),
           'title':'Register'}
+
+@view_config(route_name='profile',
+             renderer='pyramarks:templates/profile.mako',
+             permission='view')
+def user_profile(request):
+  user = User.by_id(authenticated_userid(request))
+  form = UserProfileForm(request.POST, user)
+  if request.method == 'POST' and form.validate():
+    form.populate_obj(user)
+    if form.password.data:
+      user.password = user.hash_password(form.password.data)
+    else:
+      del user.password
+    DBSession.add(user)
+    request.session.flash('User %s updated' % (user.username))
+    return HTTPFound(location=request.route_url('index'))
+  return {'form':form,
+          'action':request.matchdict.get('action'),
+          'title':'Profile'}
 
 
 ########################
@@ -113,12 +139,13 @@ def user_register(request):
 @forbidden_view_config(renderer='pyramarks:templates/login.mako')
 def bookmark_login(request):
   if request.method == "POST" and request.POST.get('username'):
-    user = User.by_username(request.POST.get('username'))
+    user = User.by_uname_email(request.POST.get('username'))
     if user and user.verify_password(request.POST.get('password')):
       headers = remember(request, user.id)
       return HTTPFound(location=request.route_url('index'),
                        headers=headers)
     headers = forget(request)
+    request.session.flash('Login failed')
     return HTTPFound(location=request.route_url('login'),
                      headers=headers)
   if authenticated_userid(request):

@@ -3,6 +3,7 @@
   <ul>
 % if authenticated_userid(request):
     <li><a href="${request.route_url('index')}">Home</a></li>
+    <li><a href="${request.route_url('profile')}">Profile</a></li>
     <li><a href="${request.route_url('logout')}">Logout</a></li>
 % else:
     <li><a href="${request.route_url('login')}">Login</a></li>

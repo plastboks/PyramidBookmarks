@@ -8,6 +8,8 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
+    or_,
+    and_,
     )
 
 from cryptacular.bcrypt import BCRYPTPasswordManager
@@ -32,6 +34,7 @@ Base = declarative_base()
 # User Class #
 ##############
 class User(Base):
+
   __tablename__ = 'users'
   id = Column(Integer, primary_key=True)
   username = Column(Unicode(255), unique=True, nullable=False)
@@ -39,17 +42,33 @@ class User(Base):
   password = Column(Unicode(255), nullable=False)
   last_logged = Column(DateTime, default=datetime.utcnow)
 
+  pm = BCRYPTPasswordManager()
+
   @classmethod
   def by_id(cls, id):
     return DBSession.query(User).filter(User.id == id).first()
 
   @classmethod
-  def by_username(cls, username):
-    return DBSession.query(User).filter(User.username == username).first()
+  def by_uname_email(cls, login):
+    return DBSession.query(User).filter(or_(User.username == login,\
+                                            User.email == login))\
+                                .first()
 
   def verify_password(self, password):
-    manager = BCRYPTPasswordManager()
-    return manager.check(self.password, password)
+    return self.pm.check(self.password, password)
+
+  def hash_password(self, password):
+    return self.pm.encode(password)
+
+  def my(self):
+    return DBSession.query(Bookmark).filter(Bookmark.owner_id == self.id)
+
+  def bookmarks(self, request, page=1):
+    page_url = PageURL_WebOb(request)
+    return Page(self.my().all(), page, url=page_url, items_per_page=12)
+
+  def bookmark(self, id):
+    return self.my().filter(Bookmark.id == id).first()
 
 
 ##################
@@ -68,10 +87,6 @@ class Bookmark(Base):
   def all(cls):
     return DBSession.query(Bookmark).order_by(sa.desc(Bookmark.created))
 
-  @classmethod
-  def by_id(cls, id):
-    return DBSession.query(Bookmark).filter(Bookmark.id == id).first()
-
   @property
   def slug(self):
     return urlify(self.title)
@@ -80,7 +95,3 @@ class Bookmark(Base):
   def created_in_words(self):
     return time_ago_in_words(self.created)
 
-  @classmethod
-  def get_paginator(cls, request, page=1):
-    page_url = PageURL_WebOb(request)
-    return Page(Bookmark.all(), page, url=page_url, items_per_page=5)
