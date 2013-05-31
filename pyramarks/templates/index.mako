@@ -17,7 +17,12 @@
                     <td class='titlecolumn'>
                         <a href="${ bookmark.url }" class="clickIncrement" target="_blank" title="${ bookmark.title }" rel="noreferrer">
                           ${ bookmark.title }
-                        </a>
+                        </a><br />
+                        % if bookmark.tags:
+                          % for w in bookmark.tags.split(' '):
+                            <a href="" class="tag">${w}</a>
+                          % endfor
+                        % endif
                     </td>
                     <td class="clickscolumn">
                       <span>0</span>

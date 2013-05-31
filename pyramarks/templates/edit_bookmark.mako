@@ -28,6 +28,11 @@
     </p>
 
     <p>
+      <label>${form.tags.label}</label><br />
+      ${form.tags()}
+    </p>
+
+    <p>
       <input type="submit" value="Submit">
     </p>
 

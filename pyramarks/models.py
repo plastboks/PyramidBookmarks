@@ -80,6 +80,7 @@ class Bookmark(Base):
   owner_id = Column(Integer, ForeignKey('users.id'))
   title = Column(Unicode(255), nullable=False)
   url = Column(Unicode(512), nullable=False)
+  tags = Column(Unicode(512))
   created = Column(DateTime, default=datetime.utcnow)
   updated = Column(DateTime, default=datetime.utcnow)
   

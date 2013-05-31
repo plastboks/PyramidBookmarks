@@ -19,6 +19,9 @@ class BookmarkCreateForm(Form):
                        validators.URL(require_tld=False,
                                       message='Not a valid URL')],
                       filters=[strip_filter])
+  tags = TextField('Tags',
+                   [validators.Length(max=512)],
+                   filters=[strip_filter])
 
 class BookmarkUpdateForm(BookmarkCreateForm):
   id = HiddenField()

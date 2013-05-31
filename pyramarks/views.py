@@ -48,6 +48,9 @@ def bookmark_create(request):
   if request.method == 'POST' and form.validate():
     form.populate_obj(bookmark)
     user_id = authenticated_userid(request)
+    bookmark.tags = ' '.join(
+                        [t.strip() for t in form.tags.data.strip().split(',')])\
+                        .lower()
     bookmark.owner_id = user_id
     DBSession.add(bookmark)
     request.session.flash('Bookmark %s created' % (bookmark.title))
@@ -69,9 +72,7 @@ def bookmark_edit(request):
   form = BookmarkUpdateForm(request.POST, bookmark)
   if request.method == 'POST' and form.validate():
     form.populate_obj(bookmark)
-    return HTTPFound(location=request.route_url('bookmark',
-                                                id=bookmark.id,
-                                                slug=bookmark.slug))
+    return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
           'action':request.matchdict.get('action'),
           'title':'Edit'+bookmark.title}
