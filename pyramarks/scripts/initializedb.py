@@ -38,7 +38,7 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
 
     manager = BCRYPTPasswordManager()
-    pw = getpass.getpass()    
+    pw = getpass.getpass('Admin password: ')
     hashed = manager.encode(pw)
     
     with transaction.manager:
