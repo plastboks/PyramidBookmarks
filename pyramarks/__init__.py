@@ -31,8 +31,11 @@ def main(global_config, **settings):
                         )
   config.add_static_view('static', 'static', cache_max_age=3600)
   config.add_route('index', '/')
-  config.add_route('bookmark_action', 
-                   '/bookmark/{action}')
+  config.add_route('new', '/new')
+  config.add_route('edit', '/edit')
+  config.add_route('delete', '/delete')
+  config.add_route('search_tag', '/search/tag')
+  config.add_route('search', '/search')
   config.add_route('register', '/register')
   config.add_route('profile', '/profile')
   config.add_route('login', '/login')

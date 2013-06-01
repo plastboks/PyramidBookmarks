@@ -33,14 +33,13 @@ from .forms import (
 def index_page(request):
   page = int(request.params.get('page', 1))
   user = User.by_id(authenticated_userid(request))
-  paginator = user.bookmarks(page)
-  return {'paginator':paginator, 
+  bookmarks = user.bookmarks(page)
+  return {'paginator':bookmarks, 
           'username':user.username,
           'title':'Home'}
 
-@view_config(route_name='bookmark_action', 
+@view_config(route_name='new', 
              renderer='pyramarks:templates/edit_bookmark.mako',
-             match_param='action=create',
              permission='create')
 def bookmark_create(request):
   bookmark = Bookmark()
@@ -56,12 +55,11 @@ def bookmark_create(request):
     request.session.flash('Bookmark %s created' % (bookmark.title))
     return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
-          'action':request.matchdict.get('action'),
+          'action':'new',
           'title':'New'}
 
-@view_config(route_name='bookmark_action',
+@view_config(route_name='edit',
              renderer='pyramarks:templates/edit_bookmark.mako',
-             match_param='action=edit',
              permission='edit')
 def bookmark_edit(request):
   user = User.by_id(authenticated_userid(request))
@@ -74,12 +72,11 @@ def bookmark_edit(request):
     form.populate_obj(bookmark)
     return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
-          'action':request.matchdict.get('action'),
+          'action':'edit',
           'title':'Edit'+bookmark.title}
 
-@view_config(route_name='bookmark_action',
+@view_config(route_name='delete',
              renderer='string',
-             match_param='action=delete',
              permission='delete')
 def bookmark_delete(request):
   user = User.by_id(authenticated_userid(request))
@@ -89,6 +86,40 @@ def bookmark_delete(request):
     DBSession.delete(bookmark)
     return HTTPFound(location=request.route_url('index'))
   return HTTPNotFound()
+
+
+##################
+# Search section #
+##################
+@view_config(route_name='search_tag',
+             renderer='pyramarks:templates/searchresults.mako',
+             permission='view')
+def search_tag(request):
+  q = request.params.get('q')
+  page = int(request.params.get('page', 1))
+  if not q:
+    return HTTPFound(location=request.route_url('index'))
+  u = User.by_id(authenticated_userid(request))
+  bookmarks = u.bookmark_tags(request=request, string=q, page=page)
+  return {'paginator':bookmarks, 
+          'title':'Searchresults',
+          'type':'tag',
+          'q': q}
+
+@view_config(route_name='search',
+             renderer='pyramarks:templates/searchresults.mako',
+             permission='view')
+def search(request):
+  q = request.params.get('q')
+  page = int(request.params.get('page', 1))
+  if not q:
+    return HTTPFound(location=request.route_url('index'))
+  u = User.by_id(authenticated_userid(request))
+  bookmarks = u.bookmark_search(request=request, string=q, page=page)
+  return {'paginator':bookmarks, 
+          'title':'Searchresults',
+          'type':'string',
+          'q': q}
 
 
 ################

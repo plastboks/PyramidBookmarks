@@ -70,6 +70,19 @@ class User(Base):
   def bookmark(self, id):
     return self.my().filter(Bookmark.id == id).first()
 
+  def bookmark_tags(self, request, string='', page=1):
+    page_url = PageURL_WebOb(request)
+    tag = "%"+string+"%"
+    bookmarks = self.my().filter(Bookmark.tags.like(tag)).all()
+    return Page(bookmarks, page, url=page_url, items_per_page=12)
+
+  def bookmark_search(self, request, string='', page=1):
+    page_url = PageURL_WebOb(request)
+    string = "%"+string+"%"
+    bookmarks = self.my().filter(or_(Bookmark.title.like(string),\
+                                     Bookmark.url.like(string))).all()
+    return Page(bookmarks, page, url=page_url, items_per_page=12)
+
 
 ##################
 # Bookmark Class #

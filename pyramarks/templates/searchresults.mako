@@ -1,8 +1,7 @@
 <%inherit file="pyramarks:templates/base.mako"/>
-
 % if paginator.items:
 
-    <h1>My bookmarks</h1>
+    <h1>Search results for ${type}; ${q} </h1>
 
     <div class="bookmarksbox">
       <table class="bookmarks">
@@ -20,7 +19,7 @@
                         </a><br />
                         % if bookmark.tags:
                           % for w in bookmark.tags.split(' '):
-                            <a href="${request.route_url('search_tag', _query=(('q', w),))}" class="tag">${w}</a>
+                            <a href="" class="tag">${w}</a>
                           % endfor
                         % endif
                     </td>

@@ -14,7 +14,7 @@
 % if authenticated_userid(request):
 <div id="secmenu">
   <ul>
-    <li><a href="${request.route_url('bookmark_action',action='create')}">Create a new bookmark</a></li>
+    <li><a href="${request.route_url('new')}">Create a new bookmark</a></li>
   </ul>
 </div>
 % endif

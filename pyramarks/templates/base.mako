@@ -15,6 +15,9 @@
 <body>
 
   <div id="header">
+    <div id="search">
+      <%include file="pyramarks:templates/searchform.mako" />
+    </div>
     <%include file="pyramarks:templates/menus.mako"/>
   </div>
   <div class="flashmessage">

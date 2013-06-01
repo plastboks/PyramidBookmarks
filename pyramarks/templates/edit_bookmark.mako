@@ -3,7 +3,7 @@
 <div id="bookmarkedit">
   <h1>Add a new bookmark</h1>
 
-  <form action="${request.route_url('bookmark_action',action=action)}" method="post">
+  <form action="${request.route_url(action)}" method="post">
 
     %if action =='edit':
       ${form.id()}
