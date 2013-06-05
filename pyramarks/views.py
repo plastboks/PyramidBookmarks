@@ -76,6 +76,9 @@ def bookmark_edit(request):
   form = BookmarkUpdateForm(request.POST, bookmark)
   if request.method == 'POST' and form.validate():
     form.populate_obj(bookmark)
+    bookmark.tags = ' '.join(
+                        [t.strip() for t in form.tags.data.strip().split(',')])\
+                        .lower()
     if not form.title.data:
       soup = BSoup(urlopen(form.url.data))
       bookmark.title = soup.title.string
