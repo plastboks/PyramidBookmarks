@@ -17,6 +17,7 @@ requires = [
     'wtforms',
     'webhelpers',
     'cryptacular',
+    'BeautifulSoup',
     ]
 
 setup(name='pyramarks',

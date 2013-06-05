@@ -5,6 +5,9 @@ from pyramid.security import authenticated_userid
 
 from sqlalchemy.exc import DBAPIError
 
+from BeautifulSoup import BeautifulSoup as BSoup
+from urllib import urlopen
+
 from pyramid.view import (
   view_config,
   forbidden_view_config,
@@ -51,6 +54,9 @@ def bookmark_create(request):
                         [t.strip() for t in form.tags.data.strip().split(',')])\
                         .lower()
     bookmark.owner_id = user_id
+    if not form.title.data:
+      soup = BSoup(urlopen(form.url.data))
+      bookmark.title = soup.title.string
     DBSession.add(bookmark)
     request.session.flash('Bookmark %s created' % (bookmark.title))
     return HTTPFound(location=request.route_url('index'))
@@ -70,6 +76,9 @@ def bookmark_edit(request):
   form = BookmarkUpdateForm(request.POST, bookmark)
   if request.method == 'POST' and form.validate():
     form.populate_obj(bookmark)
+    if not form.title.data:
+      soup = BSoup(urlopen(form.url.data))
+      bookmark.title = soup.title.string
     return HTTPFound(location=request.route_url('index'))
   return {'form':form, 
           'action':'edit',
