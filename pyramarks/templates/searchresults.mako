@@ -19,7 +19,7 @@
                         </a><br />
                         % if bookmark.tags:
                           % for w in bookmark.tags.split(' '):
-                            <a href="" class="tag">${w}</a>
+                            <a href="${request.route_url('search_tag', _query=(('q', w),))}" class="tag">${w}</a>
                           % endfor
                         % endif
                     </td>
