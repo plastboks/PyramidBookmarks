@@ -109,3 +109,11 @@ class Bookmark(Base):
   def created_in_words(self):
     return time_ago_in_words(self.created)
 
+
+##############
+# Tags Class #
+##############
+class Tag(Base):
+  __tablename__ = 'tags'
+  id = Column(Integer, primary_key=True)
+  name = Column(Unicode(255))

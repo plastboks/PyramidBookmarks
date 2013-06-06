@@ -18,6 +18,7 @@ requires = [
     'webhelpers',
     'cryptacular',
     'BeautifulSoup',
+    'alembic',
     ]
 
 setup(name='pyramarks',

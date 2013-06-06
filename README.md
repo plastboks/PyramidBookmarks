@@ -19,6 +19,15 @@ edit the secret in '__init__py'
 `pserve environment.ini`
 
 
+Alembic
+=======
+
+Alembic upgrades and migrations is done by:
+
+* edit pyramarks/models.py accordingly
+* `alembic revision --autogenerate -m "comment"`
+* `alembic upgrade head`
+
 
 Credits
 ====
@@ -29,4 +38,4 @@ Useful Links
 
 * http://docs.pylonsproject.org/projects/pyramid/en/latest/
 * http://docs.pylonsproject.org/projects/pyramid/en/1.4-branch/tutorials/wiki2/index.html
-
+* https://alembic.readthedocs.org/en/latest/tutorial.html
