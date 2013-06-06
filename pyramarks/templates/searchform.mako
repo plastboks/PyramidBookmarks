@@ -1,3 +1,5 @@
+<%! from pyramid.security import authenticated_userid %>
+% if authenticated_userid(request):
 <form action="/search" method="GET">
   <label for="q">Search</label>
 %if request.params.get('q') and type is not 'tag':
@@ -9,4 +11,5 @@
 </form>
 % if request.params.get('q') and type is not 'tag':
   <a href="/index">Reset search</a>
+% endif
 % endif
